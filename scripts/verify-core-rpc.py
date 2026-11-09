@@ -132,7 +132,8 @@ def main():
             compare("eth_getCode", [address, tag])
             compare("eth_getStorageAt", [address, "0x0", tag])
         compare("eth_getLogs", [dict(blockHash=block["hash"])])
-        call = dict(to=block["miner"], value="0x0", gas="0x186a0")
+        # Query ValidatorSet.getValidators() to exercise historical contract storage.
+        call = dict(to="0x0000000000000000000000000000000000001000", data="0xb7ab4db5", gas="0x989680")
         compare("eth_call", [call, tag])
         compare("eth_estimateGas", [call, tag])
         compare("debug_traceCall", [call, tag, dict(tracer="callTracer", timeout="60s")])

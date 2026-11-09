@@ -72,7 +72,7 @@ python3 scripts/verify-core-rpc.py --reference "$REFERENCE_RPC" \
 Import validates every block's state root, receipt root, gas and bloom. Restarting
 before the RPC comparison verifies persisted history, including states older
 than the live 128-block window. The comparator checks block/transaction data,
-logs, receipts, state reads, calls, gas estimation, and `callTracer` /
+logs, receipts, state reads, historical `getValidators()` calls, gas estimation, and `callTracer` /
 `prestateTracer` results, plus a bounded JavaScript opcode tracer. It tolerates only the added `blockTimestamp` field and
 records input/output SHA-256 digests. RPC errors and null results fail the check.
 
