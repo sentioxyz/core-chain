@@ -2070,8 +2070,6 @@ func SetEthConfig(ctx *cli.Context, stack *node.Node, cfg *ethconfig.Config) {
 		cfg.TransactionHistory = 0
 		log.Warn("Disabled transaction unindexing for archive node")
 
-		cfg.StateScheme = rawdb.HashScheme
-		log.Warn("Forcing hash state-scheme for archive mode")
 	}
 	if ctx.IsSet(CacheFlag.Name) || ctx.IsSet(CacheTrieFlag.Name) {
 		cfg.TrieCleanCache = ctx.Int(CacheFlag.Name) * ctx.Int(CacheTrieFlag.Name) / 100
@@ -2575,12 +2573,6 @@ func MakeBlockDatabase(ctx *cli.Context, stack *node.Node, readonly, disableFree
 	return blockDb
 }
 
-func PathDBConfigAddJournalFilePath(stack *node.Node, config *pathdb.Config) *pathdb.Config {
-	path := fmt.Sprintf("%s/%s", stack.ResolvePath("chaindata"), eth.JournalFileName)
-	config.JournalFilePath = path
-	return config
-}
-
 // tryMakeReadOnlyDatabase try to open the chain database in read-only mode,
 // or fallback to write mode if the database is not initialized.
 //
@@ -2756,7 +2748,6 @@ func MakeTrieDatabase(ctx *cli.Context, stack *node.Node, disk ethdb.Database, p
 	} else {
 		config.PathDB = pathdb.Defaults
 	}
-	config.PathDB.JournalFilePath = fmt.Sprintf("%s/%s", stack.ResolvePath("chaindata"), eth.JournalFileName)
 	return triedb.NewDatabase(disk, config)
 }
 

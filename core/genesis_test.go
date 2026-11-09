@@ -144,7 +144,9 @@ func testSetupGenesis(t *testing.T, scheme string) {
 				defer bc.Stop()
 
 				_, blocks, _ := GenerateChainWithGenesis(&oldcustomg, ethash.NewFaker(), 4, nil)
-				bc.InsertChain(blocks)
+				if _, err := bc.InsertChain(blocks); err != nil {
+					t.Fatalf("%s: import failed: %v", scheme, err)
+				}
 
 				// This should return a compatibility error.
 				return SetupGenesisBlock(db, tdb, &customg)

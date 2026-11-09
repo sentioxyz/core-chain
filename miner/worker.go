@@ -668,7 +668,6 @@ func (w *worker) resultLoop() {
 			}
 
 			// Commit block and state to database.
-			task.state.SetExpectedStateRoot(block.Root())
 			start := time.Now()
 			status, err := w.chain.WriteBlockAndSetHead(block, receipts, logs, task.state, true)
 			if status != core.CanonStatTy {
@@ -713,12 +712,13 @@ func (w *worker) makeEnv(parent *types.Header, header *types.Header, coinbase co
 		if err != nil {
 			return nil, err
 		}
-		state.StartPrefetcher("miner", bundle)
+		state.StartPrefetcher("miner", bundle, nil)
 	} else {
 		if prevEnv == nil {
-			state.StartPrefetcher("miner", nil)
+			state.StartPrefetcher("miner", nil, nil)
 		} else {
-			state.TransferPrefetcher(prevEnv.state)
+			prevEnv.state.StopPrefetcher()
+			state.StartPrefetcher("miner", nil, nil)
 		}
 	}
 
@@ -839,7 +839,7 @@ func (w *worker) commitTransactions(env *environment, plainTxs, blobTxs *transac
 	tx := txsPrefetch.PeekWithUnwrap()
 	if tx != nil {
 		txCurr := &tx
-		w.prefetcher.PrefetchMining(txsPrefetch, env.header, env.gasPool.Gas(), env.state.CopyDoPrefetch(), *w.chain.GetVMConfig(), stopPrefetchCh, txCurr)
+		w.prefetcher.PrefetchMining(txsPrefetch, env.header, env.gasPool.Gas(), env.state.Copy(), *w.chain.GetVMConfig(), stopPrefetchCh, txCurr)
 	}
 
 	signal := commitInterruptNone

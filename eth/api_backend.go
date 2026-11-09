@@ -208,6 +208,9 @@ func (b *EthAPIBackend) StateAndHeaderByNumber(ctx context.Context, number rpc.B
 		return nil, nil, errors.New("header not found")
 	}
 	stateDb, err := b.eth.BlockChain().StateAt(header.Root)
+	if err != nil && b.eth.BlockChain().TrieDB().Scheme() == rawdb.PathScheme {
+		stateDb, err = b.eth.BlockChain().HistoricState(header.Root)
+	}
 	if err != nil {
 		return nil, nil, err
 	}
@@ -230,6 +233,9 @@ func (b *EthAPIBackend) StateAndHeaderByNumberOrHash(ctx context.Context, blockN
 			return nil, nil, errors.New("hash is not currently canonical")
 		}
 		stateDb, err := b.eth.BlockChain().StateAt(header.Root)
+		if err != nil && b.eth.BlockChain().TrieDB().Scheme() == rawdb.PathScheme {
+			stateDb, err = b.eth.BlockChain().HistoricState(header.Root)
+		}
 		if err != nil {
 			return nil, nil, err
 		}
@@ -246,7 +252,15 @@ func (b *EthAPIBackend) GetBlobSidecars(ctx context.Context, hash common.Hash) (
 	return b.eth.blockchain.GetSidecarsByHash(hash), nil
 }
 func (b *EthAPIBackend) GetLogs(ctx context.Context, hash common.Hash, number uint64) ([][]*types.Log, error) {
-	return rawdb.ReadLogs(b.eth.chainDb, hash, number), nil
+	logs := rawdb.ReadLogs(b.eth.chainDb, hash, number)
+	if header := b.eth.blockchain.GetHeader(hash, number); header != nil {
+		for _, txLogs := range logs {
+			for _, entry := range txLogs {
+				entry.BlockTimestamp = header.Time
+			}
+		}
+	}
+	return logs, nil
 }
 
 func (b *EthAPIBackend) GetTd(ctx context.Context, hash common.Hash) *big.Int {
@@ -371,6 +385,11 @@ func (b *EthAPIBackend) Downloader() *downloader.Downloader {
 
 func (b *EthAPIBackend) SyncProgress() ethereum.SyncProgress {
 	prog := b.eth.Downloader().Progress()
+	if b.eth.blockchain.TrieDB().Scheme() == rawdb.PathScheme {
+		if remaining, err := b.eth.blockchain.StateIndexProgress(); err == nil {
+			prog.StateIndexRemaining = remaining
+		}
+	}
 	if txProg, err := b.eth.blockchain.TxIndexProgress(); err == nil {
 		prog.TxIndexFinishedBlocks = txProg.Indexed
 		prog.TxIndexRemainingBlocks = txProg.Remaining

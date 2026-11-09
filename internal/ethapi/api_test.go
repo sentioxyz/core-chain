@@ -3767,3 +3767,5 @@ func testRPCResponseWithFile(t *testing.T, testid int, result interface{}, rpc s
 func addressToHash(a common.Address) common.Hash {
 	return common.BytesToHash(a.Bytes())
 }
+
+func (*precompileContract) Name() string { return "test" }
