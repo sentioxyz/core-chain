@@ -24,7 +24,6 @@ import (
 	"math/big"
 	"runtime"
 	"slices"
-	"sort"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -661,45 +660,6 @@ func (bc *BlockChain) cacheReceipts(hash common.Hash, receipts types.Receipts, b
 	bc.receiptsCache.Add(hash, receipts)
 }
 
-func (bc *BlockChain) cacheDiffLayer(diffLayer *types.DiffLayer, diffLayerCh chan struct{}) {
-	// The difflayer in the system is stored by the map structure,
-	// so it will be out of order.
-	// It must be sorted first and then cached,
-	// otherwise the DiffHash calculated by different nodes will be inconsistent
-	sort.SliceStable(diffLayer.Codes, func(i, j int) bool {
-		return diffLayer.Codes[i].Hash.Hex() < diffLayer.Codes[j].Hash.Hex()
-	})
-	sort.SliceStable(diffLayer.Destructs, func(i, j int) bool {
-		return diffLayer.Destructs[i].Hex() < (diffLayer.Destructs[j].Hex())
-	})
-	sort.SliceStable(diffLayer.Accounts, func(i, j int) bool {
-		return diffLayer.Accounts[i].Account.Hex() < diffLayer.Accounts[j].Account.Hex()
-	})
-	sort.SliceStable(diffLayer.Storages, func(i, j int) bool {
-		return diffLayer.Storages[i].Account.Hex() < diffLayer.Storages[j].Account.Hex()
-	})
-	for index := range diffLayer.Storages {
-		// Sort keys and vals by key.
-		sort.Sort(&diffLayer.Storages[index])
-	}
-
-	if bc.diffLayerCache.Len() >= diffLayerCacheLimit {
-		bc.diffLayerCache.RemoveOldest()
-	}
-
-	bc.diffLayerCache.Add(diffLayer.BlockHash, diffLayer)
-	close(diffLayerCh)
-
-	if bc.db.DiffStore() != nil {
-		// push to priority queue before persisting
-		bc.diffQueueBuffer <- diffLayer
-	}
-}
-
-// empty returns an indicator whether the blockchain is empty.
-// Note, it's a special case that we connect a non-empty ancient
-// database with an empty node, so that we can plugin the ancient
-// into node seamlessly.
 func (bc *BlockChain) empty() bool {
 	genesis := bc.genesisBlock.Hash()
 	for _, hash := range []common.Hash{rawdb.ReadHeadBlockHash(bc.db), rawdb.ReadHeadHeaderHash(bc.db), rawdb.ReadHeadFastBlockHash(bc.db)} {
@@ -2276,7 +2236,6 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool, makeWitness 
 			vmCfg := bc.vmConfig
 			vmCfg.Tracer = nil
 			go bc.prefetcher.Prefetch(block, throwaway, &vmCfg, interruptCh)
-
 		}
 
 		// The traced section of block import.
@@ -2378,7 +2337,6 @@ type blockProcessingResult struct {
 // processBlock executes and validates the given block. If there was no error
 // it writes the block and associated state to database.
 func (bc *BlockChain) processBlock(block *types.Block, statedb *state.StateDB, start time.Time, setHead bool, interruptCh chan struct{}) (_ *blockProcessingResult, blockEndErr error) {
-
 	if bc.logger != nil && bc.logger.OnBlockStart != nil {
 		td := bc.GetTd(block.ParentHash(), block.NumberU64()-1)
 		bc.logger.OnBlockStart(tracing.BlockEvent{

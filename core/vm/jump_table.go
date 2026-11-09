@@ -94,6 +94,8 @@ func newInstructionSet(rules params.Rules) JumpTable {
 	switch {
 	case rules.IsVerkle:
 		instructionSet = &verkleInstructionSet
+	case rules.IsOsaka:
+		instructionSet = &osakaInstructionSet
 	case rules.IsPrague:
 		instructionSet = &pragueInstructionSet
 	case rules.IsCancun:

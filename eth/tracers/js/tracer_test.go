@@ -33,19 +33,6 @@ import (
 	"github.com/holiman/uint256"
 )
 
-type account struct{}
-
-func (account) SubBalance(amount *big.Int)                          {}
-func (account) AddBalance(amount *big.Int)                          {}
-func (account) SetAddress(common.Address)                           {}
-func (account) Value() *big.Int                                     { return nil }
-func (account) SetBalance(*uint256.Int)                             {}
-func (account) SetNonce(uint64)                                     {}
-func (account) Balance() *uint256.Int                               { return nil }
-func (account) Address() common.Address                             { return common.Address{} }
-func (account) SetCode(common.Hash, []byte)                         {}
-func (account) ForEachStorage(cb func(key, value common.Hash) bool) {}
-
 type dummyStatedb struct {
 	state.StateDB
 }

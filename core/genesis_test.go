@@ -297,7 +297,9 @@ func newDbConfig(scheme string) *triedb.Config {
 	if scheme == rawdb.HashScheme {
 		return triedb.HashDefaults
 	}
-	return &triedb.Config{PathDB: pathdb.Defaults}
+	config := *pathdb.Defaults
+	config.NoAsyncFlush = true
+	return &triedb.Config{PathDB: &config}
 }
 
 func TestVerkleGenesisCommit(t *testing.T) {
@@ -332,6 +334,7 @@ func TestVerkleGenesisCommit(t *testing.T) {
 		BlobScheduleConfig: &params.BlobScheduleConfig{
 			Cancun: params.DefaultCancunBlobConfig,
 			Prague: params.DefaultPragueBlobConfig,
+			Osaka:  params.DefaultOsakaBlobConfig,
 			Verkle: params.DefaultPragueBlobConfig,
 		},
 	}
@@ -353,7 +356,9 @@ func TestVerkleGenesisCommit(t *testing.T) {
 	}
 
 	db := rawdb.NewMemoryDatabase()
-	triedb := triedb.NewDatabase(db, triedb.VerkleDefaults)
+	config := *pathdb.Defaults
+	config.NoAsyncFlush = true
+	triedb := triedb.NewDatabase(db, &triedb.Config{IsVerkle: true, PathDB: &config})
 	block := genesis.MustCommit(db, triedb)
 	if !bytes.Equal(block.Root().Bytes(), expected) {
 		t.Fatalf("invalid genesis state root, expected %x, got %x", expected, block.Root())

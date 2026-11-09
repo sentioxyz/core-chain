@@ -274,7 +274,6 @@ func (pre *Prestate) Apply(vmConfig vm.Config, chainConfig *params.ChainConfig, 
 		blobGasUsed += txBlobGas
 		receipt.Bloom = types.CreateBloom(receipt)
 		receipts = append(receipts, receipt)
-
 	}
 
 	statedb.IntermediateRoot(chainConfig.IsEIP158(vmContext.BlockNumber))
