@@ -1,7 +1,7 @@
 # Core archive validation
 
 The JSON reports identify the exact candidate binary and reference client.
-`manifest.json` pins the validated Go source commit, both upstream bases, the
+`manifest.json` pins the initially validated Go source commit, both upstream bases, the
 canonical RLP input hash, archive settings, and validation limits. Reference RPC
 addresses and credentials are not recorded.
 
@@ -18,6 +18,13 @@ addresses and credentials are not recorded.
   `prestateTracer` comparisons, and each replay matched the reference node's
   original transaction trace. The report records hashes of the captured input
   and normalized output.
+- `berlin-boundary.json`: source `86bcb14892c3ca01e4771e2fee5de62003fdd0cd`
+  passed full-sync import across Berlin and 24 official-client comparisons at
+  blocks 19,537,199–19,537,201, including complete receipts, block call/prestate
+  traces, historical contract calls and state reads. It fixes the system-transaction
+  access-list panic at Berlin while preserving Core's cold-access gas rules before
+  Hermes. The regression reproduces the panic before the fix and checks gas costs
+  before Berlin, at Berlin, and at Hermes; Satoshi, StateDB and EVM suites pass.
 
 Modern replays use touched prestate and block overrides. They do not validate
 complete modern block state roots, consensus or state outside the captured
