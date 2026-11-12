@@ -1497,6 +1497,8 @@ func (s *StateDB) AccessEvents() *AccessEvents {
 	return s.accessEvents
 }
 
-func (s *StateDB) ClearAccessList() { s.accessList = nil }
+// ClearAccessList resets pre-Hermes system transactions without warming any
+// addresses or slots. Berlin gas operations require a usable empty list.
+func (s *StateDB) ClearAccessList() { s.accessList = newAccessList() }
 
 func (s *StateDB) TxHash() common.Hash { return s.thash }
