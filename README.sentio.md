@@ -6,9 +6,9 @@ RPC interfaces and tracing hooks. Geth's path database, flat-state history and
 historical index provide archive reads without retaining every historical trie.
 
 The intended use is an RPC/archive node. Validator operation has not been
-qualified. Mainnet disk savings and full-chain synchronization time need a
-separate full-sync measurement; Ethereum's published archive sizes do not predict
-Core's size.
+qualified. A mainnet full sync has completed; historical query comparisons are
+recorded in [the validation reports](validation/README.md). Disk measurements are
+observations from that run, not a controlled storage benchmark.
 
 ## Build and run
 
@@ -87,5 +87,6 @@ not reproduce the original trace.
 The initial validation replayed mainnet blocks 1–512 and passed 102 RPC checks
 after restart. Five further transactions from blocks 19,537,201; 23,000,000;
 30,000,000; 40,000,011; and 40,308,868 passed both tracer comparisons, including
-the original-transaction checks. These results cover selected cases, not an
-entire mainnet replay. Machine-readable summaries are in `validation/`.
+the original-transaction checks. Subsequent mainnet full sync and larger historical
+comparisons are recorded in `validation/full-history-audit.json`; RPC and tracing
+comparisons remain sampled rather than exhaustive.

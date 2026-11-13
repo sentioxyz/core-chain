@@ -25,11 +25,22 @@ addresses and credentials are not recorded.
   access-list panic at Berlin while preserving Core's cold-access gas rules before
   Hermes. The regression reproduces the panic before the fix and checks gas costs
   before Berlin, at Berlin, and at Hermes; Satoshi, StateDB and EVM suites pass.
+- `full-history-audit.json` and `full-history-plan.json`: after full mainnet sync,
+  900 historical blocks passed 25,409 comparisons, covering 8,380 transactions and
+  12,367 receipt logs. The sample combines deterministic stratified random blocks,
+  dense early/recent ranges, and all 11 configured fork boundaries. Both native
+  block tracers ran at 125 heights, with additional transaction/call traces,
+  historical state, contract calls, receipts, raw blocks and logs compared.
+  A separate deterministic 10,000-block sample and 64 filtered historical log
+  windows of 5,000 blocks each added 10,064 passing comparisons. In total,
+  35,473 comparisons passed across 10,899 distinct sampled block heights.
 
 Modern replays use touched prestate and block overrides. They do not validate
 complete modern block state roots, consensus or state outside the captured
-accounts. A full mainnet sync and disk benchmark are still required. Historical
-Merkle proofs and validator operation are outside this qualification.
+accounts. Full mainnet sync has since completed, with normal canonical state-root
+and receipt-root validation. Historical query comparisons remain sampled; disk
+observations are not a controlled benchmark. Historical Merkle proofs and validator
+operation are outside this qualification.
 
 See [reproduction instructions](../README.sentio.md). Local build and regression
 checks use Go 1.24 with `GOMAXPROCS=2`, `go test -p=1 -parallel=2`, and linter
