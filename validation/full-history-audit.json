@@ -80,5 +80,17 @@
     "strata": 10000,
     "head": 40425001,
     "algorithm": "random.Random(seed).randint(1+head*i//strata, max(1+head*i//strata, head*(i+1)//strata)) for i in range(strata)"
+  },
+  "storageObservation": {
+    "measuredAtUTC": "2026-11-13T17:37:01.816431+00:00",
+    "candidateAllocatedBytes": 389667274752,
+    "referenceAllocatedBytes": 5025223630848,
+    "reductionPercent": 92.25,
+    "note": "Observed filesystem allocation after full sync; not a controlled benchmark."
+  },
+  "restartVerification": {
+    "passed": 150,
+    "historicalHeights": 37,
+    "newHeadsSubscription": "Two advancing headers received after restart."
   }
 }
