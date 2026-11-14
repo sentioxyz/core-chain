@@ -627,9 +627,9 @@ func (s *Ethereum) newChainView(head *types.Header) *filtermaps.ChainView {
 }
 
 func (s *Ethereum) updateFilterMapsHeads() {
-	headEventCh := make(chan core.ChainEvent, 10)
+	headEventCh := make(chan core.ChainHeadEvent, 10)
 	blockProcCh := make(chan bool, 10)
-	sub := s.blockchain.SubscribeChainEvent(headEventCh)
+	sub := s.blockchain.SubscribeChainHeadEvent(headEventCh)
 	sub2 := s.blockchain.SubscribeBlockProcessingEvent(blockProcCh)
 	defer func() {
 		sub.Unsubscribe()
