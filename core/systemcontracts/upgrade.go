@@ -763,6 +763,9 @@ func init() {
 }
 
 func TryUpdateBuildInSystemContract(config *params.ChainConfig, blockNumber *big.Int, lastBlockTime uint64, blockTime uint64, statedb vm.StateDB, atBlockBegin bool) {
+	if config.Satoshi == nil {
+		return
+	}
 	if atBlockBegin {
 		if !config.IsHermes(blockNumber, lastBlockTime) {
 			upgradeBuildInSystemContract(config, blockNumber, lastBlockTime, blockTime, statedb)
