@@ -46,6 +46,10 @@ addresses and credentials are not recorded.
   This build has not undergone another complete mainnet sync or storage
   benchmark. Fixture samples use consecutive positions rather than the full
   mainnet layout; the report distinguishes that from native block-range tests.
+  The complete `./tests` conformance suite also passed without short mode using
+  execution-spec-tests v5.1.0 and all storage configurations. Its two exclusions
+  match Geth v1.16.9's missing-system-contract deployment fixture exclusions and
+  are listed in the report.
 
 Modern replays use touched prestate and block overrides. They do not validate
 complete modern block state roots, consensus or state outside the captured

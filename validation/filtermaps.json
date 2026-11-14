@@ -1,11 +1,11 @@
 {
-  "observedAtUTC": "2026-11-14T05:18:10.003639+00:00",
-  "sourceCommit": "394dba164b16ce95a1a356617a8427a21361936a",
+  "observedAtUTC": "2026-11-14T06:01:34.471031+00:00",
+  "sourceCommit": "07db4b776905351ed7734a31b40ea4722c0ae5d0",
   "binary": {
     "os": "darwin",
     "architecture": "arm64",
     "goVersion": "1.24.4",
-    "sha256": "9d887b43f5fc1bfe212c08087a48575a82e407ab19a71266d0146573b71f529f"
+    "sha256": "2fb8a8ca985e3fb2c6d7bb71594e5af81b0f695996d1728ac0db2e2ae7474b8c"
   },
   "reference": {
     "sourceCommit": "86bcb14892c3ca01e4771e2fee5de62003fdd0cd",
@@ -88,7 +88,8 @@
       "height": 512,
       "rangeComparisons": 5,
       "rpcComparisons": 102,
-      "indexedSearchObserved": true
+      "indexedSearchObserved": true,
+      "persistedIndexPrimedAndCleanlyStopped": true
     },
     "rewound": {
       "height": 256,
@@ -191,7 +192,7 @@
     "additionalTransactionsFrom": "modern-replay.json"
   },
   "evidence": "filtermaps-rpc.json",
-  "evidenceSha256": "08bf7bcded4f5c3929f9782ccfa3e46373d70601ae3ae45e1fcb67e8835d7eb3",
+  "evidenceSha256": "93f84ead04ae874a1b6dd78f11dd79b459fc821406f5462f84cfa33c36512079",
   "limitations": [
     "No new full-mainnet sync of this filtermaps build and no controlled mainnet indexing or disk benchmark.",
     "Historical sample positions are not a full mainnet block-range layout.",
@@ -204,7 +205,7 @@
     "historicalFixture": {
       "command": "CORE_FILTERMAPS_FIXTURE=<captured-fixture> GOMAXPROCS=2 go test -p=1 -parallel=2 -timeout=12m -run ^TestCoreHistoryFilterMaps$ -v ./eth/filters",
       "status": "passed",
-      "logSha256": "40c667ed61ce999a2e3786ec48649fcd55e8913a2baaf46ee924610d887bf70b"
+      "logSha256": "3ef41e4b568220aa38ad1ca1be53d2ecc95031255a595093ec6057cf83699c6c"
     },
     "lint": {
       "command": "GOMAXPROCS=2 go run build/ci.go lint",
@@ -213,7 +214,9 @@
       "modules": [
         "root",
         "cmd/keeper"
-      ]
+      ],
+      "sourceCommit": "07db4b776905351ed7734a31b40ea4722c0ae5d0",
+      "logSha256": "80d79ba5c8f1bf531eb7fe4561a8b5d7f0a811c430dbceb83dde940dd8be8a4f"
     },
     "configuration": {
       "TOMLValues": {
@@ -234,13 +237,43 @@
     "ethRepeated": {
       "command": "GOMAXPROCS=2 go test -p=1 -parallel=2 -tags=integrationtests -timeout=3m -count=3 ./eth",
       "status": "passed",
-      "durationSeconds": 105.412
+      "durationSeconds": 105.412,
+      "sourceCommit": "89693caafff4f4690eea87583f5ae842465220c6"
     },
     "conformanceFixtures": {
       "executionSpecTests": "v5.1.0",
       "executionSpecCommit": "d7d6251a0702aef32fbb5b9d38a8ab1dd99304c7",
-      "ethereumTestsCommit": "81862e4848585a438d64f911a19b3825f0f4cd95"
+      "ethereumTestsCommit": "81862e4848585a438d64f911a19b3825f0f4cd95",
+      "nativeGethExclusions": [
+        "prague/eip7251_consolidations/test_system_contract_deployment.json",
+        "prague/eip7002_el_triggerable_withdrawals/test_system_contract_deployment.json"
+      ]
+    },
+    "pragueRegressions": {
+      "status": "passed",
+      "logSha256": "0c696945f149161774af6f2eabb2949fa496e63e0c2f97f7295d5cf7a62dbd42",
+      "scope": "Original failing Prague system-call, deposit-event and block-hash contract deployment fixtures; all storage configurations."
+    },
+    "fullConformance": {
+      "command": "GOMAXPROCS=2 go test -p=1 -parallel=2 -tags=integrationtests -timeout=15m ./tests",
+      "status": "passed",
+      "short": false,
+      "durationSeconds": 420.654,
+      "logSha256": "a0aaed3d7a7de1ad681e13ebb28473eed29e34358c9ace3c67a4883a59255d33"
+    },
+    "core": {
+      "command": "GOMAXPROCS=2 go test -p=1 -parallel=2 -tags=integrationtests -short -timeout=12m ./...",
+      "status": "passed",
+      "packageDurationSeconds": 182.584,
+      "scope": "Core package within the repository-wide invocation"
+    },
+    "repositoryShort": {
+      "command": "GOMAXPROCS=2 go test -p=1 -parallel=2 -tags=integrationtests -short -timeout=12m ./...",
+      "status": "passed",
+      "packagesPassed": 141,
+      "packagesWithoutTests": 74,
+      "logSha256": "b56a836aa21c5f4c34d0c53d2a7b64b58d8b4de216ed467ef7e6f48e6fe5af70"
     }
   },
-  "testHarnessCommit": "89693caafff4f4690eea87583f5ae842465220c6"
+  "testHarnessCommit": "07db4b776905351ed7734a31b40ea4722c0ae5d0"
 }

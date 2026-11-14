@@ -1,5 +1,5 @@
 {
-  "candidateSourceCommit": "394dba164b16ce95a1a356617a8427a21361936a",
+  "candidateSourceCommit": "07db4b776905351ed7734a31b40ea4722c0ae5d0",
   "reference": {
     "sourceCommit": "86bcb14892c3ca01e4771e2fee5de62003fdd0cd",
     "qualification": "Previously compared with official Core v1.0.27; see full-history-audit.json",
@@ -1111,10 +1111,10 @@
           "sha256": "2f86d9f40c5bcc35be64bb24af986b92e7da6ebd5f2b2c9207da63354d0956d4"
         }
       ],
-      "rawRpcReportSha256": "e9c0aea0bce9b72b2527d89e9341fb4e4da1bd39c0aa9a82af007ea88b6db2f5",
+      "rawRpcReportSha256": "bf70eda1dd4e3473535d3c5f42cf9eb20f2cfd286d8eddd16974832cb73e839c",
       "rawRangeReportSha256": "fc64f8693d94768908c2095cb5ce9901d9a31c3b55a7a44fc4a0df36848f310c",
       "referenceVersionSha256": "3e9f1785e7d5454467d16d9532b96c848007de5819f04e20a034ea8dcfa8de2d",
-      "candidateVersion": "Geth/v1.0.27-geth1.16.9-394dba16-20261113/darwin-arm64/go1.24.4"
+      "candidateVersion": "Geth/v1.0.27-geth1.16.9-07db4b77-20261113/darwin-arm64/go1.24.4"
     },
     {
       "name": "rewound",
@@ -2024,10 +2024,10 @@
           "sha256": "2d5d0fa718b448a3fd7eca1e10833e076f53d10215f3d10166d19a150bcfc9a9"
         }
       ],
-      "rawRpcReportSha256": "989e862b1e3dd33902e9c794e1fde3863d8c93d9134295175a523c703aa32d00",
+      "rawRpcReportSha256": "6ab32fe7286aec22f9fa438d416e4e4d9a84cadb184d7e200a9017b9327964f8",
       "rawRangeReportSha256": "43a315dc7579d1e38a74ec0d16ea3d57e11e41ea2203be405554831e54aee69d",
       "referenceVersionSha256": "3e9f1785e7d5454467d16d9532b96c848007de5819f04e20a034ea8dcfa8de2d",
-      "candidateVersion": "Geth/v1.0.27-geth1.16.9-394dba16-20261113/darwin-arm64/go1.24.4"
+      "candidateVersion": "Geth/v1.0.27-geth1.16.9-07db4b77-20261113/darwin-arm64/go1.24.4"
     },
     {
       "name": "restored",
@@ -3134,10 +3134,10 @@
           "sha256": "2f86d9f40c5bcc35be64bb24af986b92e7da6ebd5f2b2c9207da63354d0956d4"
         }
       ],
-      "rawRpcReportSha256": "e9c0aea0bce9b72b2527d89e9341fb4e4da1bd39c0aa9a82af007ea88b6db2f5",
+      "rawRpcReportSha256": "bf70eda1dd4e3473535d3c5f42cf9eb20f2cfd286d8eddd16974832cb73e839c",
       "rawRangeReportSha256": "fc64f8693d94768908c2095cb5ce9901d9a31c3b55a7a44fc4a0df36848f310c",
       "referenceVersionSha256": "3e9f1785e7d5454467d16d9532b96c848007de5819f04e20a034ea8dcfa8de2d",
-      "candidateVersion": "Geth/v1.0.27-geth1.16.9-394dba16-20261113/darwin-arm64/go1.24.4"
+      "candidateVersion": "Geth/v1.0.27-geth1.16.9-07db4b77-20261113/darwin-arm64/go1.24.4"
     },
     {
       "name": "disabled",
@@ -4244,10 +4244,10 @@
           "sha256": "2f86d9f40c5bcc35be64bb24af986b92e7da6ebd5f2b2c9207da63354d0956d4"
         }
       ],
-      "rawRpcReportSha256": "e9c0aea0bce9b72b2527d89e9341fb4e4da1bd39c0aa9a82af007ea88b6db2f5",
+      "rawRpcReportSha256": "bf70eda1dd4e3473535d3c5f42cf9eb20f2cfd286d8eddd16974832cb73e839c",
       "rawRangeReportSha256": "fc64f8693d94768908c2095cb5ce9901d9a31c3b55a7a44fc4a0df36848f310c",
       "referenceVersionSha256": "3e9f1785e7d5454467d16d9532b96c848007de5819f04e20a034ea8dcfa8de2d",
-      "candidateVersion": "Geth/v1.0.27-geth1.16.9-394dba16-20261113/darwin-arm64/go1.24.4"
+      "candidateVersion": "Geth/v1.0.27-geth1.16.9-07db4b77-20261113/darwin-arm64/go1.24.4"
     }
   ],
   "tracing": {
@@ -4606,7 +4606,7 @@
         "matchesOriginalTransaction": true
       }
     ],
-    "rawReportSha256": "205b94ee43227ba7a72a674b3fe9f1545303703f1225dfc271c0240f99619a3b"
+    "rawReportSha256": "377915f0a4c2f22db79a9864db7f18259d8f6a0ecacbd34e851ac83db880c4fa"
   },
   "rangeComparison": "Reference uses numeric block zero and candidate uses earliest; equality includes blockTimestamp."
 }
