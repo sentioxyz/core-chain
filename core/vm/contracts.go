@@ -258,6 +258,8 @@ func activePrecompiledContracts(rules params.Rules) PrecompiledContracts {
 	switch {
 	case rules.IsVerkle:
 		precompiles = PrecompiledContractsVerkle
+	case rules.IsOsaka:
+		precompiles = PrecompiledContractsOsaka
 	case rules.IsPrague:
 		precompiles = PrecompiledContractsPrague
 	case rules.IsCancun:
