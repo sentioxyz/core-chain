@@ -32,6 +32,11 @@ reclaim its disk space. Keep the existing node available while the new node sync
 enables historical indexing; `eth_syncing.stateIndexRemaining` reports incomplete
 indexing. Historical reads become available after their index is ready.
 
+`--history.transactions=0` retains the complete transaction lookup index. Log
+queries retain Core's bloom-bit index and read historical receipts; Geth's
+filtermaps index and its `--history.logs` option are not integrated in this port.
+This does not limit the retained range of historical logs.
+
 Historical balances, nonces, code, storage, `eth_call`, transaction traces, block
 traces and call traces use the historical state reader. Logs include the
 additional Geth `blockTimestamp` field. Historical `eth_getProof` needs historical
