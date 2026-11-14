@@ -115,6 +115,13 @@ func (b *testBackend) GetReceipts(ctx context.Context, hash common.Hash) (types.
 
 func (b *testBackend) GetLogs(ctx context.Context, hash common.Hash, number uint64) ([][]*types.Log, error) {
 	logs := rawdb.ReadLogs(b.db, hash, number)
+	if header := rawdb.ReadHeader(b.db, hash, number); header != nil {
+		for _, txLogs := range logs {
+			for _, entry := range txLogs {
+				entry.BlockTimestamp = header.Time
+			}
+		}
+	}
 	return logs, nil
 }
 
