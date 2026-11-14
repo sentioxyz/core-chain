@@ -199,12 +199,16 @@ func setupPool() (*LegacyPool, *ecdsa.PrivateKey) {
 }
 
 func setupPoolWithConfig(config *params.ChainConfig) (*LegacyPool, *ecdsa.PrivateKey) {
+	return setupPoolWithConfigs(config, testTxPoolConfig)
+}
+
+func setupPoolWithConfigs(config *params.ChainConfig, poolConfig Config) (*LegacyPool, *ecdsa.PrivateKey) {
 	statedb, _ := state.New(types.EmptyRootHash, state.NewDatabaseForTesting())
 	blockchain := newTestBlockChain(config, 10000000, statedb, new(event.Feed))
 
 	key, _ := crypto.GenerateKey()
-	pool := New(testTxPoolConfig, blockchain)
-	if err := pool.Init(testTxPoolConfig.PriceLimit, blockchain.CurrentBlock(), makeAddressReserver()); err != nil {
+	pool := New(poolConfig, blockchain)
+	if err := pool.Init(poolConfig.PriceLimit, blockchain.CurrentBlock(), makeAddressReserver()); err != nil {
 		panic(err)
 	}
 	// wait for the pool to initialize
@@ -1597,13 +1601,13 @@ func TestRepricingDynamicFee(t *testing.T) {
 // Note, local transactions are never allowed to be dropped.
 func TestUnderpricing(t *testing.T) {
 	t.Parallel()
-	testTxPoolConfig.OverflowPoolSlots = 5
 
 	// Create the pool to test the pricing enforcement with
 	statedb, _ := state.New(types.EmptyRootHash, state.NewDatabaseForTesting())
 	blockchain := newTestBlockChain(params.TestChainConfig, 1000000, statedb, new(event.Feed))
 
 	config := testTxPoolConfig
+	config.OverflowPoolSlots = 5
 	config.GlobalSlots = 2
 	config.GlobalQueue = 2
 
@@ -1842,13 +1846,14 @@ func TestUnderpricingDynamicFee(t *testing.T) {
 func TestDualHeapEviction(t *testing.T) {
 	t.Parallel()
 
-	testTxPoolConfig.OverflowPoolSlots = 1
-	pool, _ := setupPoolWithConfig(eip1559Config)
+	config := testTxPoolConfig
+	config.OverflowPoolSlots = 1
+	// Both heaps need capacity under their 4:1 split. Four total slots would
+	// leave the floating heap empty after a reheap.
+	config.GlobalSlots = 10
+	config.GlobalQueue = 10
+	pool, _ := setupPoolWithConfigs(eip1559Config, config)
 	defer pool.Close()
-
-	pool.config.GlobalSlots = 2
-	pool.config.GlobalQueue = 2
-	pool.config.OverflowPoolSlots = 1
 
 	var (
 		highTip, highCap *types.Transaction
@@ -1864,7 +1869,7 @@ func TestDualHeapEviction(t *testing.T) {
 	}
 
 	add := func(urgent bool) {
-		for i := 0; i < 4; i++ {
+		for i := 0; i < 20; i++ {
 			var tx *types.Transaction
 			// Create a test accounts and fund it
 			key, _ := crypto.GenerateKey()
@@ -1885,8 +1890,8 @@ func TestDualHeapEviction(t *testing.T) {
 			pool.addRemotesSync([]*types.Transaction{tx})
 		}
 		pending, queued := pool.Stats()
-		if pending+queued != 4 {
-			t.Fatalf("transaction count mismatch: have %d, want %d, pending %d, queued %d, OverflowPool %d", pending+queued, 5, pending, queued, pool.localBufferPool.Size())
+		if pending+queued != 20 {
+			t.Fatalf("transaction count mismatch: have %d, want %d, pending %d, queued %d, OverflowPool %d", pending+queued, 20, pending, queued, pool.localBufferPool.Size())
 		}
 	}
 
@@ -2053,8 +2058,9 @@ func TestReplacement(t *testing.T) {
 
 func TestTransferTransactions(t *testing.T) {
 	t.Parallel()
-	testTxPoolConfig.OverflowPoolSlots = 1
-	pool, _ := setupPoolWithConfig(eip1559Config)
+	config := testTxPoolConfig
+	config.OverflowPoolSlots = 1
+	pool, _ := setupPoolWithConfigs(eip1559Config, config)
 	defer pool.Close()
 
 	pool.config.GlobalSlots = 1
