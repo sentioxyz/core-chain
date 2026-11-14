@@ -357,6 +357,7 @@ func doTest(cmdline []string) {
 		short    = flag.Bool("short", false, "Pass the 'short'-flag to go test")
 		cachedir = flag.String("cachedir", "./build/cache", "directory for caching downloads")
 		threads  = flag.Int("p", 1, "Number of CPU threads to use for testing")
+		timeout  = flag.Duration("timeout", 45*time.Minute, "Maximum time to run each test package")
 	)
 	flag.CommandLine.Parse(cmdline)
 
@@ -377,7 +378,7 @@ func doTest(cmdline []string) {
 	gotest := tc.Go("test")
 
 	// CI needs a bit more time for the statetests (default 45m).
-	gotest.Args = append(gotest.Args, "-timeout=45m")
+	gotest.Args = append(gotest.Args, "-timeout="+timeout.String())
 
 	// Enable CKZG backend in CI.
 	gotest.Args = append(gotest.Args, "-tags=ckzg")

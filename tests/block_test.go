@@ -26,6 +26,8 @@ import (
 
 func TestBlockchain(t *testing.T) {
 	bt := new(testMatcher)
+	// Fixture metadata contains no blockchain tests.
+	bt.skipLoad(`.*\.meta/.*`)
 
 	// We are running most of GeneralStatetests to tests witness support, even
 	// though they are ran as state tests too. Still, the performance tests are
