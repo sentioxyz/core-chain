@@ -34,6 +34,18 @@ addresses and credentials are not recorded.
   A separate deterministic 10,000-block sample and 64 filtered historical log
   windows of 5,000 blocks each added 10,064 passing comparisons. In total,
   35,473 comparisons passed across 10,899 distinct sampled block heights.
+- `filtermaps.json` and `filtermaps-rpc.json`: qualification of the subsequent
+  Geth v1.16.9 log-index integration, with an exact source commit and binary hash.
+  The 900 historical sample blocks contain 12,367 logs; their raw blocks,
+  receipts and block-hash log queries match 2,700 recorded official-client
+  results. Indexed/reopened/limited/disabled searches passed 14,104 comparisons.
+  Native disk restart, a deep rewind from 512 to 256, canonical reimport and
+  disabled-index fallback passed 389 RPC/tracing checks and 20 strict log-range
+  comparisons. Sixteen later transactions across all 11 fork groups passed 32
+  sparse replay comparisons, each also matching its original transaction trace.
+  This build has not undergone another complete mainnet sync or storage
+  benchmark. Fixture samples use consecutive positions rather than the full
+  mainnet layout; the report distinguishes that from native block-range tests.
 
 Modern replays use touched prestate and block overrides. They do not validate
 complete modern block state roots, consensus or state outside the captured

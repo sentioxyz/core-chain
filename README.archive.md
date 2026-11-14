@@ -103,3 +103,32 @@ after restart. Five further transactions from blocks 19,537,201; 23,000,000;
 the original-transaction checks. Subsequent mainnet full sync and larger historical
 comparisons are recorded in `validation/full-history-audit.json`; RPC and tracing
 comparisons remain sampled rather than exhaustive.
+
+## Reproduce filtermaps history checks
+
+Capture the deterministic historical sample from an archive RPC, then run the
+opt-in integration test locally:
+
+```sh
+python3 scripts/capture-core-log-fixture.py --reference "$REFERENCE_RPC" \
+  --plan validation/full-history-plan.json --output /tmp/core-history.json
+
+CORE_FILTERMAPS_FIXTURE=/tmp/core-history.json GOMAXPROCS=2 \
+  go test -p=1 -parallel=2 -timeout=12m \
+  -run '^TestCoreHistoryFilterMaps$' -v ./eth/filters
+```
+
+The fixture retains original raw blocks, receipts and log metadata. The test
+checks receipt roots, then compares range/address/topic queries in indexed,
+reopened, limited-history and disabled modes. It also verifies that indexed
+queries read index rows and disabled queries do not. Historical samples occupy
+consecutive fixture positions; this tests historical log contents rather than
+the complete mainnet block-range layout. Native range-search tests additionally
+exercise pruning, index lag and concurrent reorgs.
+
+The capture script accepts `--golden checks.jsonl` to check log results against
+previously recorded official-client comparisons. Raw fixtures remain local.
+See [filtermaps validation](validation/filtermaps.json) for the tested source,
+evidence hashes, native restart/rewind checks and tracing coverage. The earlier
+full-sync qualification applies to its recorded source, not to a new full sync
+of the filtermaps build.
