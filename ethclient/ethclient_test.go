@@ -28,6 +28,7 @@ import (
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/consensus/ethash"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/rawdb"
@@ -544,12 +545,12 @@ func testStatusFunctions(t *testing.T, client *rpc.Client) {
 		t.Fatalf("unexpected gas tip cap: %v", gasTipCap)
 	}
 
-	// BlobBaseFee
-	blobBaseFee, err := ec.BlobBaseFee(context.Background())
-	if err != nil {
+	// This fixture chain is pre-Cancun; Core returns null for the blob base fee.
+	var blobBaseFee *hexutil.Big
+	if err := client.CallContext(context.Background(), &blobBaseFee, "eth_blobBaseFee"); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if blobBaseFee.Cmp(big.NewInt(1)) != 0 {
+	if blobBaseFee != nil {
 		t.Fatalf("unexpected blob base fee: %v", blobBaseFee)
 	}
 
