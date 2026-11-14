@@ -19,7 +19,7 @@ go build -o build/bin/geth ./cmd/geth
 build/bin/geth --mainnet \
   --datadir /data/core-path-archive \
   --state.scheme=path --syncmode=full --gcmode=archive \
-  --history.state=0 --history.transactions=0 \
+  --history.state=0 --history.transactions=0 --history.logs=0 \
   --http --http.addr=127.0.0.1 --http.api=eth,debug,web3,net
 ```
 
@@ -32,10 +32,18 @@ reclaim its disk space. Keep the existing node available while the new node sync
 enables historical indexing; `eth_syncing.stateIndexRemaining` reports incomplete
 indexing. Historical reads become available after their index is ready.
 
-`--history.transactions=0` retains the complete transaction lookup index. Log
-queries retain Core's bloom-bit index and read historical receipts; Geth's
-filtermaps index and its `--history.logs` option are not integrated in this port.
-This does not limit the retained range of historical logs.
+`--history.transactions=0` retains the complete transaction lookup index.
+`--history.logs=0` retains Geth's filtermaps log-search index for the entire chain.
+A nonzero value limits the index history; `--history.logs.disable` disables the
+index. Both options retain historical receipts, and queries outside the indexed
+range fall back to receipt-based searches. Index retention follows epoch
+boundaries, so it may retain more than the configured number of blocks.
+
+The index follows canonical head changes and reorgs, resumes from its persisted
+state after restart, and replaces the old bloom-bit index. An existing path
+archive can build this log index from its retained receipts without resyncing
+state. Queries remain available while the index catches up. Building an index
+over a large existing archive requires additional I/O and disk space.
 
 Historical balances, nonces, code, storage, `eth_call`, transaction traces, block
 traces and call traces use the historical state reader. Logs include the
@@ -60,12 +68,12 @@ python3 scripts/verify-core-rpc.py --reference "$REFERENCE_RPC" \
 
 build/bin/geth --mainnet --datadir /tmp/core-path-check \
   --state.scheme=path --syncmode=full --gcmode=archive \
-  --history.state=0 --history.transactions=0 \
+  --history.state=0 --history.transactions=0 --history.logs=0 \
   import /tmp/core-first-512.rlp
 
 build/bin/geth --mainnet --datadir /tmp/core-path-check \
   --state.scheme=path --syncmode=full --gcmode=archive \
-  --history.state=0 --history.transactions=0 \
+  --history.state=0 --history.transactions=0 --history.logs=0 \
   --maxpeers=0 --nodiscover --nat=none --port=0 --ipcdisable \
   --http --http.addr=127.0.0.1 --http.port=18546 --http.api=eth,debug,web3,net
 

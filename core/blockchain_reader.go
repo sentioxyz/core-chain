@@ -526,3 +526,8 @@ func (bc *BlockChain) StateIndexProgress() (uint64, error) {
 }
 
 func (bc *BlockChain) HistoryPruningCutoff() (uint64, common.Hash) { return 0, bc.genesisBlock.Hash() }
+
+// GetRawReceipts retrieves stored receipts without deriving log metadata.
+func (bc *BlockChain) GetRawReceipts(hash common.Hash, number uint64) types.Receipts {
+	return rawdb.ReadRawReceipts(bc.db, hash, number)
+}
