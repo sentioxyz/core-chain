@@ -1,6 +1,5 @@
 {
   "referenceVersion": "Geth/v1.0.27-90aca9a0-20261031/linux-amd64/go1.23.12",
-  "candidateVersion": "Geth/v1.0.27-sentio-geth1.16.9-2f9c0ec4-20261109/darwin-arm64/go1.24.4",
   "allowedAdditionalFields": [
     "blockTimestamp"
   ],
@@ -116,5 +115,13 @@
       "matchesOriginalTransaction": true
     }
   ],
-  "passed": 10
+  "passed": 10,
+  "candidateBuild": {
+    "coreVersion": "1.0.27",
+    "gethVersion": "1.16.9",
+    "sourceCommit": "2f9c0ec45634046cc3cc89a39cad09f8d547111e",
+    "buildDate": "20261109",
+    "platform": "darwin-arm64",
+    "goVersion": "go1.24.4"
+  }
 }

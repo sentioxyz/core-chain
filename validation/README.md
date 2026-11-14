@@ -42,7 +42,7 @@ and receipt-root validation. Historical query comparisons remain sampled; disk
 observations are not a controlled benchmark. Historical Merkle proofs and validator
 operation are outside this qualification.
 
-See [reproduction instructions](../README.sentio.md). Local build and regression
+See [reproduction instructions](../README.archive.md). Local build and regression
 checks use Go 1.24 with `GOMAXPROCS=2`, `go test -p=1 -parallel=2`, and linter
 concurrency 2.
 

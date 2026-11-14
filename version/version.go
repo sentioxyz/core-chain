@@ -20,5 +20,5 @@ const (
 	Major = 1                   // Major version component of the current release
 	Minor = 0                   // Minor version component of the current release
 	Patch = 27                  // Patch version component of the current release
-	Meta  = "sentio-geth1.16.9" // Version metadata to append to the version string
+	Meta  = "geth1.16.9" // Version metadata to append to the version string
 )

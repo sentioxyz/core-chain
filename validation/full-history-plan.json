@@ -1,10 +1,6 @@
 {
   "head": 40425001,
   "seed": 111620261113,
-  "versions": [
-    "Geth/v1.0.27-90aca9a0-20261031/linux-amd64/go1.23.12",
-    "Geth/v1.0.27-sentio-geth1.16.9-86bcb148-20261112/linux-amd64/go1.24.13"
-  ],
   "forks": {
     "Zeus": 8020000,
     "Hera": 12195500,
@@ -1046,5 +1042,14 @@
     40424982,
     40424992,
     40425001
-  ]
+  ],
+  "referenceVersion": "Geth/v1.0.27-90aca9a0-20261031/linux-amd64/go1.23.12",
+  "candidateBuild": {
+    "coreVersion": "1.0.27",
+    "gethVersion": "1.16.9",
+    "sourceCommit": "86bcb14892c3ca01e4771e2fee5de62003fdd0cd",
+    "buildDate": "20261112",
+    "platform": "linux-amd64",
+    "goVersion": "go1.24.13"
+  }
 }
