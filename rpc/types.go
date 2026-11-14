@@ -63,7 +63,7 @@ type jsonWriter interface {
 type BlockNumber int64
 
 const (
-	EarliestBlockNumber  = BlockNumber(-5)
+	EarliestBlockNumber  = BlockNumber(0) // Core resolves earliest to genesis.
 	SafeBlockNumber      = BlockNumber(-4)
 	FinalizedBlockNumber = BlockNumber(-3)
 	LatestBlockNumber    = BlockNumber(-2)
